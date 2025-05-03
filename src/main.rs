@@ -74,6 +74,7 @@ fn save_cache(cache_path: &PathBuf, modified: u64, paths: &[PathBuf]) {
     }
 }
 
+///Return timestamp of a path
 fn get_modified_timestamp(path: &PathBuf) -> u64 {
     metadata(path)
         .and_then(|m| m.modified())
@@ -84,13 +85,18 @@ fn get_modified_timestamp(path: &PathBuf) -> u64 {
 }
 
 fn main() {
+    //Get home directory
     let mut path = home_dir().expect("Error while getting home dir");
+
+    //Push Desktop on path
     path.push("Desktop");
 
+    //Create a different path for the cache
     let mut cache_path = home_dir().unwrap();
     cache_path.push(CACHE_DIR);
     cache_path.push(CACHE_FILE);
 
+    //Return the "path" modified timestamp
     let current_modified = get_modified_timestamp(&path);
 
     let mut dirs = if let Some(cache) = load_cache(&cache_path) {
